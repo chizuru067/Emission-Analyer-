@@ -2,8 +2,45 @@
 <html>
 <head>
   <title>8-Mode Emission Test</title>
-  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .mode {
+      background: white;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    input {
+      margin: 2px;
+      width: 60px;
+    }
+    button {
+      background: #ff9800;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 5px;
+      text-align: center;
+    }
+  </style>
 </head>
+
 <body>
 
 <h2>8-Mode Emission Test</h2>
@@ -11,10 +48,62 @@
 <div id="modes"></div>
 
 <button onclick="generateTable()">Generate Final Table</button>
-<button onclick="generatePDF()">Download PDF</button>
+<button onclick="window.print()">Download PDF</button>
 
 <div id="output"></div>
 
-<script src="script.js"></script>
+<script>
+  const modesDiv = document.getElementById("modes");
+
+  for (let i = 1; i <= 8; i++) {
+    modesDiv.innerHTML += `
+      <div class="mode">
+        <h3>Mode ${i}</h3>
+        <label>Upload Photo:</label>
+        <input type="file" accept="image/*"><br><br>
+
+        O₂ <input id="o2_${i}">
+        CO <input id="co_${i}">
+        NO <input id="no_${i}">
+        NO₂ <input id="no2_${i}">
+        NOx <input id="nox_${i}">
+        CO₂ <input id="co2_${i}">
+      </div>
+    `;
+  }
+
+  function generateTable() {
+    let html = `
+      <table>
+        <tr>
+          <th>Mode</th>
+          <th>O₂</th>
+          <th>CO</th>
+          <th>NO</th>
+          <th>NO₂</th>
+          <th>NOx</th>
+          <th>CO₂</th>
+        </tr>
+    `;
+
+    for (let i = 1; i <= 8; i++) {
+      html += `
+        <tr>
+          <td>${i}</td>
+          <td>${document.getElementById("o2_" + i).value}</td>
+          <td>${document.getElementById("co_" + i).value}</td>
+          <td>${document.getElementById("no_" + i).value}</td>
+          <td>${document.getElementById("no2_" + i).value}</td>
+          <td>${document.getElementById("nox_" + i).value}</td>
+          <td>${document.getElementById("co2_" + i).value}</td>
+        </tr>
+      `;
+    }
+
+    html += "</table>";
+    document.getElementById("output").innerHTML = html;
+  }
+</script>
+
 </body>
 </html>
